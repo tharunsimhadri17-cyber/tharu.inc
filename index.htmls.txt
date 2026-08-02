@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Tejuuu ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#8ec5fc,#ff9ecf);
+color:white;
+overflow-x:hidden;
+text-align:center;
+}
+
+section{
+padding:50px 20px;
+}
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+h1{
+font-size:3rem;
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{text-shadow:0 0 10px white;}
+to{text-shadow:0 0 30px hotpink;}
+}
+
+.subtitle{
+font-size:20px;
+margin-top:15px;
+}
+
+#countdown{
+font-size:30px;
+margin:25px;
+font-weight:bold;
+background:rgba(255,255,255,.2);
+padding:15px 30px;
+border-radius:15px;
+backdrop-filter:blur(10px);
+}
+
+.card{
+background:rgba(255,255,255,.15);
+padding:20px;
+margin:15px auto;
+max-width:700px;
+border-radius:20px;
+backdrop-filter:blur(12px);
+}
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:12px;
+background:#ff4fa3;
+color:white;
+font-size:16px;
+cursor:pointer;
+margin:10px;
+}
+
+button:hover{
+background:#ff2d87;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
+}
+
+.balloon{
+width:65px;
+height:80px;
+background:pink;
+border-radius:50%;
+display:inline-block;
+margin:10px;
+cursor:pointer;
+position:relative;
+animation:float 4s infinite ease-in-out;
+}
+
+.balloon:nth-child(even){
+background:#6ec6ff;
+}
+
+.balloon::after{
+content:"";
+width:2px;
+height:40px;
+background:white;
+position:absolute;
+left:50%;
+top:80px;
+}
+
+@keyframes float{
+50%{
+transform:translateY(-20px);
+}
+}
+
+#guessInput{
+padding:10px;
+border:none;
+border-radius:10px;
+width:150px;
+text-align:center;
+}
+
+.puzzle{
+display:grid;
+grid-template-columns:repeat(3,80px);
+gap:4px;
+justify-content:center;
+margin-top:20px;
+}
+
+.tile{
+background:white;
+color:#ff2d87;
+font-size:28px;
+font-weight:bold;
+display:flex;
+align-items:center;
+justify-content:center;
+height:80px;
+cursor:pointer;
+border-radius:10px;
+}
+
+.empty{
+background:transparent;
+}
+
+footer{
+padding:40px;
+font-size:18px;
+}
+
+@media(max-width:600px){
+
+h1{
+font-size:2.2rem;
+}
+
+#countdown{
+font-size:22px;
+}
+
+.tile{
+width:70px;
+height:70px;
+}
+
+.puzzle{
+grid-template-columns:repeat(3,70px);
+}
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<section class="hero">
+
+<h1>🎉 Happy Birthday Tejuuu 💖</h1>
+
+<div class="subtitle">
+May your smile shine brighter than every star ✨
+</div>
+
+<div id="countdown"></div>
+
+</section>
+
+<section>
+
+<h2>💌 A Few Notes For You</h2>
+
+<div class="card">
+🌸 You deserve endless happiness, laughter and beautiful memories.
+</div>
+
+<div class="card">
+💙 Thank you for being the amazing person you are.
+</div>
+
+<div class="card">
+🌈 Hope this year brings dreams that become reality.
+</div>
+
+<div class="card">
+🎂 Stay happy, stay healthy and keep smiling forever.
+</div>
+
+</section>
+
+<section>
+
+<h2>🎈 Balloon Pop Game</h2>
+
+<p>Pop every balloon!</p>
+
+<div id="balloons"></div>
+
+<h3 id="balloonScore">Score : 0</h3>
+
+</section>
+
+<section>
+
+<h2>🎯 Guess the Number</h2>
+
+<p>Guess between 1 and 50</p>
+
+<input id="guessInput" type="number">
+
+<button onclick="guess()">Guess</button>
+
+<p id="guessResult"></p>
+
+</section>
+
+<section>
+
+<h2>🧩 Puzzle Game</h2>
+
+<p>Arrange numbers in order!</p>
+
+<div class="puzzle" id="puzzle"></div>
+
+</section>
+
+<footer>
+Made with 💙 & 💖 for Tejuuu
+</footer>
+
+<script>
+
+//================ Countdown ==================
+
+const countdown=document.getElementById("countdown");
+
+const target=new Date("August 2, 2026 00:00:00").getTime();
+
+function timer(){
+
+const now=new Date().getTime();
+
+let diff=target-now;
+
+if(diff<=0){
+
+countdown.innerHTML="🎉 IT'S BIRTHDAY TIME 🎉";
+
+return;
+
+}
+
+let d=Math.floor(diff/86400000);
+let h=Math.floor((diff%86400000)/3600000);
+let m=Math.floor((diff%3600000)/60000);
+let s=Math.floor((diff%60000)/1000);
+
+countdown.innerHTML=
+`${d}d ${h}h ${m}m ${s}s`;
+
+}
+
+setInterval(timer,1000);
+timer();
+
+//================ Confetti ==================
+
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let pieces=[];
+
+for(let i=0;i<200;i++){
+
+pieces.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*6+2,
+d:Math.random()*5+1,
+c:`hsl(${Math.random()*360},100%,60%)`
+});
+
+}
+
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+pieces.forEach(p=>{
+
+ctx.beginPath();
+
+ctx.fillStyle=p.c;
+
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+
+ctx.fill();
+
+p.y+=p.d;
+
+if(p.y>canvas.height)p.y=0;
+
+});
+
+requestAnimationFrame(draw);
+
+}
+
+draw();
+
+//================ Balloon Game ==================
+
+let score=0;
+
+const balloonDiv=document.getElementById("balloons");
+
+for(let i=0;i<20;i++){
+
+let b=document.createElement("div");
+
+b.className="balloon";
+
+b.onclick=function(){
+
+this.remove();
+
+score++;
+
+document.getElementById("balloonScore").innerHTML="Score : "+score;
+
+if(score==20){
+
+alert("🎉 You popped them all!");
+
+}
+
+}
+
+balloonDiv.appendChild(b);
+
+}
+
+//================ Guess Game ==================
+
+const random=Math.floor(Math.random()*50)+1;
+
+function guess(){
+
+let val=Number(document.getElementById("guessInput").value);
+
+if(val==random)
+
+document.getElementById("guessResult").innerHTML="🎉 Correct!";
+
+else if(val>random)
+
+document.getElementById("guessResult").innerHTML="Too High";
+
+else
+
+document.getElementById("guessResult").innerHTML="Too Low";
+
+}
+
+//================ Puzzle ==================
+
+let board=[1,2,3,4,5,6,7,8,""];
+
+board.sort(()=>Math.random()-0.5);
+
+function render(){
+
+const p=document.getElementById("puzzle");
+
+p.innerHTML="";
+
+board.forEach((v,i)=>{
+
+let d=document.createElement("div");
+
+d.className="tile";
+
+if(v==="") d.classList.add("empty");
+
+d.innerHTML=v;
+
+d.onclick=()=>move(i);
+
+p.appendChild(d);
+
+});
+
+}
+
+function move(i){
+
+let empty=board.indexOf("");
+
+let allowed=[i-1,i+1,i-3,i+3];
+
+if(allowed.includes(empty)){
+
+[board[i],board[empty]]=[board[empty],board[i]];
+
+render();
+
+if(board.join()=="1,2,3,4,5,6,7,8,")
+
+setTimeout(()=>alert("🎉 Puzzle Solved!"),100);
+
+}
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
